@@ -1,31 +1,6 @@
 
 file = open("lab2/data.txt", "r", encoding="utf-8")
-
-def check_data(file): # 1. Проверка данных
-    lines = file.readlines()
-    k7 = unicue_number(lines)
-    count = 0
-    valid = True
-    for stroka in lines:
-        count+=1
-        stroka = stroka.strip()
-        if stroka == "":
-            print(f'Строка под номером {count} пустая')
-            continue
-        list_member = stroka.split(";")
-        k1 = check_pole(list_member, count) #проверка на 6 полей
-        k2 = check_member_number(list_member, count) #проверка на номер участника
-        k3 = check_name(list_member, count) # проверка на пустое имя участника
-        k4 = check_group(list_member, count) # проверка на пустое название группы
-        k5 = check_int_point(list_member, count) # целое число баллов
-        k6 = check_diapazon_point(list_member, count) # диапазон баллов 
-        if not(k1 and k2 and k3 and k4 and k5 and k6 and k7):
-            valid = False
-            continue
-        else:
-            print("Улет")
-                
-            
+lines = file.readlines()      
 
 def unicue_number(file):
     member_number = []
@@ -47,11 +22,11 @@ def check_pole(list_member, number_stroki):
         return 1
 
 def check_member_number(list_member, number_stroki):
-    if int(list_member[0])<=0 or not list_member[0].isdigit():
+    if float(list_member[0])<=0 or not list_member[0].isdigit():
         print(f"Строка {number_stroki}: Номер участника должен быть положительным целым числом")
         return 0
     else:
-        return 1
+       return 1
 
 
 def check_name(list_member, number_stroki):
@@ -88,5 +63,19 @@ def check_diapazon_point(list_member, number_stroki):
     else:
         print(f"Строка {number_stroki}: балл должен быть от 0 до 100")
         return 0
-
-check_data(file)
+cnt = 0
+for stroka in lines:
+    cnt +=1
+    stroka = stroka.strip()
+    if len(stroka) == "":
+        continue
+    stroka = stroka.split(';')
+    k1 = check_pole(stroka, cnt) #проверка на 6 полей
+    k2 = check_member_number(stroka, cnt) #проверка на номер участника
+    k3 = check_name(stroka, cnt) # проверка на пустое имя участника
+    k4 = check_group(stroka, cnt) # проверка на пустое название группы
+    k5 = check_int_point(stroka, cnt) # целое число баллов
+    k6 = check_diapazon_point(stroka, cnt) # диапазон баллов 
+k7 = unicue_number(lines)
+if k1 and k2 and k3 and k4 and k5 and k6 and k7:
+    print("крутяк")
