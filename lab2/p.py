@@ -12,7 +12,10 @@ def unicue_number(file):
             member_number.append(st[0])
         else:
             print(f"Строка {cnt}: повторяющийся номер участника {st[0]}")
+            member_number.append(st[0])
             return 0
+    if len(member_number) == len(set(member_number)):
+        return 1
 
 def check_pole(list_member, number_stroki):
     if len(list_member) != 6:
@@ -63,19 +66,82 @@ def check_diapazon_point(list_member, number_stroki):
     else:
         print(f"Строка {number_stroki}: балл должен быть от 0 до 100")
         return 0
-cnt = 0
-for stroka in lines:
-    cnt +=1
-    stroka = stroka.strip()
-    if len(stroka) == "":
-        continue
-    stroka = stroka.split(';')
-    k1 = check_pole(stroka, cnt) #проверка на 6 полей
-    k2 = check_member_number(stroka, cnt) #проверка на номер участника
-    k3 = check_name(stroka, cnt) # проверка на пустое имя участника
-    k4 = check_group(stroka, cnt) # проверка на пустое название группы
-    k5 = check_int_point(stroka, cnt) # целое число баллов
-    k6 = check_diapazon_point(stroka, cnt) # диапазон баллов 
-k7 = unicue_number(lines)
-if k1 and k2 and k3 and k4 and k5 and k6 and k7:
-    print("крутяк")
+
+def last_check(lines):
+    cnt = 0
+    for stroka in lines:
+        cnt +=1
+        stroka = stroka.strip()
+        if len(stroka) == "":
+            continue
+        stroka = stroka.split(';')
+        k1 = check_pole(stroka, cnt) #проверка на 6 полей
+        k2 = check_member_number(stroka, cnt) #проверка на номер участника
+        k3 = check_name(stroka, cnt) # проверка на пустое имя участника
+        k4 = check_group(stroka, cnt) # проверка на пустое название группы
+        k5 = check_int_point(stroka, cnt) # целое число баллов
+        k6 = check_diapazon_point(stroka, cnt) # диапазон баллов 
+    k7 = unicue_number(lines)
+    if k1 and k2 and k3 and k4 and k5 and k6 and k7:
+        print("C входными данными все хорошо")
+
+def get_category(s): #На вход подается сумма баллов
+    if s>=240:
+        return "Отличный результат"
+    elif s>=180:
+        return 'Хороший результат'
+    elif s>=120:
+        return "Удовлетворительный результат"
+    elif s<120:
+        return "Надо подготовиться"
+    else:
+        return "Ошибка в баллах"
+
+def creation_dict(lines):
+    members = {}
+    for stroka in lines:
+        stroka = stroka.strip()
+        if not stroka:
+            continue
+        parts = stroka.split(';')
+        itog = int(parts[-1]) +int(parts[-2]) +int(parts[-3])
+        sr_itog = round(itog/3, 2)
+        member_id = parts[0]
+        members[member_id] = {
+            "name": parts[1],
+            "group": parts[2],
+            "points": [int(parts[3]), int(parts[4]), int(parts[5])],
+            "final": int(itog),
+            "srednee": sr_itog, 
+            "category": get_category(itog)
+        }
+    return members
+
+
+while True:
+    last_check(lines)
+    print('-----')
+    print('1. Показать всех участников')
+    print('2. Показать общий рейтинг')
+    print('3. Найти участников по группе')
+    print('4. Найти участников по части имени')
+    print('5. Показать участников, прошедших отбор')
+    print('6. Показать статистику')
+    print('7. Сохранить отчёт')
+    print('0. Завершить программу')
+    print('-----')
+    choice = int(input())
+    if choice == 1:
+        members = []
+        for i in lines:
+            stroka = i.strip().split(';')
+            if len(stroka)!=0:
+                members.append(stroka[1])
+        print(members)
+        print('-----')
+    elif choice == 2:
+        ...
+    elif choice == 0:
+        break
+last_check(lines)
+print(creation_dict(lines))
