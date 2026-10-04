@@ -129,11 +129,40 @@ def print_members(members):
         print(f"  Категория: {data['category']}")
 
 def sorted_dict(dictionary):
-    sorted_dictionary = sorted(dictionary.items(), key=lambda x: x[1]["final"], reverse=True)
+    sorted_dictionary = sorted(
+        dictionary.items(), 
+        key=lambda x: (-x[1]["final"], x[1]["name"]), 
+    )
     for member_id, data in sorted_dictionary:
         points = ", ".join(map(str, data["points"]))
         print(f"№{member_id} | {data['name']:<20} | Итог: {data['final']} | {data['category']}")
 
+def find_group(dictionary, request):
+    for member_id, data in dictionary.items():
+            points_str = ", ".join(map(str, data["points"]))
+            if dictionary[member_id]["group"] == request:
+                print(f"Участник №{member_id}")
+                print(f"  Имя:       {data['name']}")
+                print(f"  Группа:    {data['group']}")
+                print(f"  Баллы:     {points_str}")
+                print(f"  Итог:      {data['final']}")
+                print(f"  Среднее:   {data['srednee']}")
+                print(f"  Категория: {data['category']}")
+    else:
+        print(f"Никого из группы {request} не найдено")
+
+def find_name(dictionary, request = str):
+    for member_id, data in dictionary.items():
+            points_str = ", ".join(map(str, data["points"]))
+            if request in str(dictionary[member_id]["name"]) :
+                print(f"Участник №{member_id}")
+                print(f"  Имя:       {data['name']}")
+                print(f"  Группа:    {data['group']}")
+                print(f"  Баллы:     {points_str}")
+                print(f"  Итог:      {data['final']}")
+                print(f"  Среднее:   {data['srednee']}")
+                print(f"  Категория: {data['category']}")
+            
 
 
 while True:
@@ -161,9 +190,13 @@ while True:
     elif choice == 2:
         sorted_dict(creation_dict(lines))
     elif choice == 3:
-        ... 
+        request = input("Участников какой группы ищем?")
+        request = request.upper().replace(' ', '')
+        find_group(creation_dict(lines), request)
     elif choice == 4:
-        ...
+        question = input("Часть имени кого ищем?")
+        ... # не хватает проверки на регистр 
+        find_name(creation_dict(lines), question)
     elif choice == 5:
         ...
     elif choice == 6:
