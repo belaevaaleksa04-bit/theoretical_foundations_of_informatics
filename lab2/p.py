@@ -117,6 +117,24 @@ def creation_dict(lines):
         }
     return members
 
+def print_members(members):
+    for member_id, data in members.items():
+        points_str = ", ".join(map(str, data["points"]))
+        print(f"Участник №{member_id}")
+        print(f"  Имя:       {data['name']}")
+        print(f"  Группа:    {data['group']}")
+        print(f"  Баллы:     {points_str}")
+        print(f"  Итог:      {data['final']}")
+        print(f"  Среднее:   {data['srednee']}")
+        print(f"  Категория: {data['category']}")
+
+def sorted_dict(dictionary):
+    sorted_dictionary = sorted(dictionary.items(), key=lambda x: x[1]["final"], reverse=True)
+    for member_id, data in sorted_dictionary:
+        points = ", ".join(map(str, data["points"]))
+        print(f"№{member_id} | {data['name']:<20} | Итог: {data['final']} | {data['category']}")
+
+
 
 while True:
     last_check(lines)
@@ -138,10 +156,23 @@ while True:
             if len(stroka)!=0:
                 members.append(stroka[1])
         print(members)
+        print_members(creation_dict(lines))
         print('-----')
     elif choice == 2:
+        sorted_dict(creation_dict(lines))
+    elif choice == 3:
+        ... 
+    elif choice == 4:
+        ...
+    elif choice == 5:
+        ...
+    elif choice == 6:
+        ...
+    elif choice == 7:
         ...
     elif choice == 0:
         break
-last_check(lines)
-print(creation_dict(lines))
+    else:
+        print("Выберете число из списка, пожалуйста")
+
+
