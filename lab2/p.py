@@ -1,6 +1,5 @@
-
 file = open("lab2/data.txt", "r", encoding="utf-8")
-lines = file.readlines()      
+lines = file.readlines()
 
 def unicue_number(file):
     member_number = []
@@ -151,10 +150,11 @@ def find_group(dictionary, request):
     else:
         print(f"Никого из группы {request} не найдено")
 
-def find_name(dictionary, request = str):
+def find_name(dictionary = dict, request = str):
+    request = request.lower()
     for member_id, data in dictionary.items():
             points_str = ", ".join(map(str, data["points"]))
-            if request in str(dictionary[member_id]["name"]) :
+            if request in str(dictionary[member_id]["name"]).lower() :
                 print(f"Участник №{member_id}")
                 print(f"  Имя:       {data['name']}")
                 print(f"  Группа:    {data['group']}")
@@ -163,6 +163,54 @@ def find_name(dictionary, request = str):
                 print(f"  Среднее:   {data['srednee']}")
                 print(f"  Категория: {data['category']}")
             
+def check_prohod(dictionary: dict):
+    for member_id, data in dictionary.items():
+        if int(data["final"]) >180 and data['points'][0]>49 and data['points'][1]>49 and data['points'][2]>49:
+            print(f"Участник №{member_id}")
+            print(f"  Имя:       {data['name']}")
+            print(f"  Группа:    {data['group']}")
+            print(f"  Баллы:     {data["points"]}")
+            print(f"  Итог:      {data['final']}")
+            print(f"  Среднее:   {data['srednee']}")
+            print(f"  Категория: {data['category']}")
+
+def group_analyse(dictionary: dict):
+    groups = {}  # ключ = название группы, значение = список участников
+    for member_id, data in dictionary.items():
+        group_name = data["group"]
+        # Если группы ещё нет в словаре — создаём пустой список
+        if group_name not in groups:
+            groups[group_name] = []
+        groups[group_name].append({
+            "id": member_id,
+            "name": data["name"],
+            "final": data["final"],
+            "points": data["points"],
+            "srednee": data["srednee"],
+            "category": data["category"]
+        })
+    for group_name, members in sorted(groups.items()):
+        print(f"\n{'='*20}")
+        print(f"Группа: {group_name}")
+        print(f"{'='*20}")
+        count = len(members)
+        print(f"Количество участников: {count}")
+        finals = [m["final"] for m in members]
+        avg = sum(finals) / count
+        print(f"Средний итоговый балл: {avg:.2f}")
+        max_final = max(finals)
+        print(f"Максимальный итоговый балл: {max_final}")
+        best_members = [m for m in members if m["final"] == max_final]
+        print(f"Участников с максимальным баллом: {len(best_members)}")
+        for m in best_members:
+            points_str = ", ".join(map(str, m["points"]))
+            print(f"  Участник №{m['id']}")
+            print(f"    Имя:       {m['name']}")
+            print(f"    Группа:    {group_name}")
+            print(f"    Баллы:     {points_str}")
+            print(f"    Итог:      {m['final']}")
+            print(f"    Среднее:   {m['srednee']}")
+            print(f"    Категория: {m['category']}")
 
 
 while True:
@@ -195,17 +243,15 @@ while True:
         find_group(creation_dict(lines), request)
     elif choice == 4:
         question = input("Часть имени кого ищем?")
-        ... # не хватает проверки на регистр 
         find_name(creation_dict(lines), question)
     elif choice == 5:
-        ...
+        check_prohod(creation_dict(lines))
     elif choice == 6:
-        ...
+        group_analyse(creation_dict(lines))
     elif choice == 7:
         ...
     elif choice == 0:
         break
     else:
         print("Выберете число из списка, пожалуйста")
-
 
