@@ -66,7 +66,7 @@ def check_group(list_member, number_stroki):
 def check_int_point(list_member, number_stroki):
     error = []
     if len(list_member) != 6:
-        return error  # уже поймано в check_pole
+        return error 
     
     try:
         int(list_member[-1].strip())
@@ -246,7 +246,6 @@ def check_prohod(dictionary: dict):
             print(f"Участник №{member_id}")
             print(f"  Имя:       {data['name']}")
             print(f"  Группа:    {data['group']}")
-            # ИСПРАВЛЕНО: были двойные кавычки внутри f-строки {data["points"]}
             print(f"  Баллы:     {points_str}")
             print(f"  Итог:      {data['final']}")
             print(f"  Среднее:   {data['srednee']}")
